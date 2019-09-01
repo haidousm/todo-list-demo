@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const date = require(__dirname + "/date.js");
 
 const app = express();
 
@@ -15,14 +16,8 @@ app.use(bodyParser.urlencoded({
 
 app.get("/", (req, res) => {
 
-    let date = new Date().toLocaleDateString("en", {
-        month: "long",
-        day: "numeric",
-        year: 'numeric'
-    })
-
     res.render(__dirname + "/views/list.ejs", {
-        date: date,
+        date: date.getDate(),
         itemsList: itemsList
     });
 
