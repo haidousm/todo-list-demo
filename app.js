@@ -28,6 +28,13 @@ app.get("/", (req, res) => {
 
 })
 
+app.post("/", (req, res)=>{
+
+    itemsList.push(req.body.newItem);
+    res.redirect("/");
+
+})
+
 app.listen(3000, () => {
 
     console.log("Server running on port 3000.")
