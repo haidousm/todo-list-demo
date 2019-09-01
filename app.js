@@ -3,7 +3,11 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
+let itemsList = []
+
 app.set("view engine", "ejs");
+
+app.use(express.static("public"));
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -11,7 +15,16 @@ app.use(bodyParser.urlencoded({
 
 app.get("/", (req, res) => {
 
-    res.send("It's setup!")
+    let date = new Date().toLocaleDateString("en", {
+        month: "long",
+        day: "numeric",
+        year: 'numeric'
+    })
+
+    res.render(__dirname + "/views/list.ejs", {
+        date: date,
+        itemsList: itemsList
+    });
 
 })
 
