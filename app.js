@@ -100,7 +100,7 @@ app.post("/", (req, res) => {
 
 })
 
-app.post("/:listTitle", (req, res)=>{
+app.post("/:listTitle", (req, res) => {
 
     const currentListTitle = req.params.listTitle;
 
@@ -109,14 +109,16 @@ app.post("/:listTitle", (req, res)=>{
     });
 
     Item.insertMany([newItem]);
-    
-    List.findOne({listTitle: currentListTitle}, (err, list)=>{
 
-        if(err){
+    List.findOne({
+        listTitle: currentListTitle
+    }, (err, list) => {
+
+        if (err) {
 
             console.log(err)
 
-        }else{
+        } else {
 
             list.items.push(newItem);
             list.save();
@@ -128,7 +130,9 @@ app.post("/:listTitle", (req, res)=>{
 
 })
 
-app.post("/delete", (req, res) => {
+app.post("/:listTitle/delete", (req, res) => {
+
+    const currentListTitle = req.params.listTitle;
 
     Item.findByIdAndDelete(req.body.checkbox, (err) => {
 
@@ -138,7 +142,7 @@ app.post("/delete", (req, res) => {
 
         } else {
 
-            res.redirect("/");
+            res.redirect("/" + currentListTitle);
 
         }
 

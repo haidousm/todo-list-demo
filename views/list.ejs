@@ -10,7 +10,7 @@
 
     <% for(var i = 0; i<itemsList.length; i++){ %>
     <div class="item">
-        <form action="/delete" method="post">
+        <form action="/<%= listTitle %>/delete" method="post">
             <input type="checkbox" name="checkbox" class="item" onChange="this.form.submit()"
                 value="<%=itemsList[i]._id%>">
         </form>
