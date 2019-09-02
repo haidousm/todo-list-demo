@@ -20,6 +20,14 @@ const Item = mongoose.model("Item", {
     content: String
 });
 
+const List = mongoose.model("List", {
+    listTitle: String,
+    items: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Item'
+    }]
+});
+
 const defItem1 = new Item({
     content: "Welcome To Your To-Do List!"
 });
@@ -36,27 +44,46 @@ const defaultItems = [defItem1, defItem2, defItem3];
 
 app.get("/", (req, res) => {
 
-    Item.find({}, (err, foundItems) => {
+    res.redirect("/today");
+
+})
+
+app.get("/:listTitle", (req, res) => {
+
+    const currentListTitle = req.params.listTitle;
+
+    List.findOne({
+        listTitle: currentListTitle
+    }).populate("items").exec(function (err, list) {
 
         if (err) {
 
-            console.log(err);
+            console.log(err)
 
         } else {
 
-            if (foundItems.length == 0) {
+            if (list) {
 
-                Item.insertMany(defaultItems)
+
                 res.render("list.ejs", {
-                    listTitle: "Today",
-                    itemsList: defaultItems
+                    listTitle: list.listTitle,
+                    itemsList: list.items
                 })
 
             } else {
 
+                Item.insertMany(defaultItems)
+
+                const newList = new List({
+                    listTitle: currentListTitle,
+                    items: defaultItems
+                });
+
+                List.insertMany([newList]);
+
                 res.render("list.ejs", {
-                    listTitle: "Today",
-                    itemsList: foundItems
+                    listTitle: currentListTitle,
+                    itemsList: defaultItems
                 })
 
             }
@@ -69,21 +96,23 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
 
-    var newItem = new Item({content: req.body.newItem});
+    var newItem = new Item({
+        content: req.body.newItem
+    });
     Item.insertMany([newItem]);
     res.redirect("/");
 
 })
 
-app.post("/delete", (req, res)=>{
+app.post("/delete", (req, res) => {
 
-    Item.findByIdAndDelete(req.body.checkbox, (err)=>{
+    Item.findByIdAndDelete(req.body.checkbox, (err) => {
 
-        if(err){
+        if (err) {
 
             console.log(err)
 
-        }else{
+        } else {
 
             res.redirect("/");
 
