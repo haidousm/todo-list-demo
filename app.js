@@ -1,6 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const date = require(__dirname + "/date.js");
 
 const app = express();
 
@@ -17,7 +16,7 @@ app.use(bodyParser.urlencoded({
 app.get("/", (req, res) => {
 
     res.render(__dirname + "/views/list.ejs", {
-        date: date.getDate(),
+        listTitle: "Today",
         itemsList: itemsList
     });
 
