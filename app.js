@@ -4,8 +4,6 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-let itemsList = []
-
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
@@ -27,11 +25,11 @@ const defItem1 = new Item({
 });
 
 const defItem2 = new Item({
-    name: "Hit the + button to add a new item."
+    content: "Hit the + button to add a new item."
 });
 
 const defItem3 = new Item({
-    name: "<-- Hit this to delete an item."
+    content: "<-- Hit this to delete an item."
 });
 
 const defaultItems = [defItem1, defItem2, defItem3];
@@ -71,8 +69,27 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
 
-    itemsList.push(req.body.newItem);
+    var newItem = new Item({content: req.body.newItem});
+    Item.insertMany([newItem]);
     res.redirect("/");
+
+})
+
+app.post("/delete", (req, res)=>{
+
+    Item.findByIdAndDelete(req.body.checkbox, (err)=>{
+
+        if(err){
+
+            console.log(err)
+
+        }else{
+
+            res.redirect("/");
+
+        }
+
+    })
 
 })
 
