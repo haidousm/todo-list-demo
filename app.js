@@ -96,11 +96,35 @@ app.get("/:listTitle", (req, res) => {
 
 app.post("/", (req, res) => {
 
+    res.redirect("/today");
+
+})
+
+app.post("/:listTitle", (req, res)=>{
+
+    const currentListTitle = req.params.listTitle;
+
     var newItem = new Item({
         content: req.body.newItem
     });
+
     Item.insertMany([newItem]);
-    res.redirect("/");
+    
+    List.findOne({listTitle: currentListTitle}, (err, list)=>{
+
+        if(err){
+
+            console.log(err)
+
+        }else{
+
+            list.items.push(newItem);
+            list.save();
+            res.redirect("/" + currentListTitle);
+
+        }
+
+    })
 
 })
 
