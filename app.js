@@ -44,7 +44,7 @@ const defaultItems = [defItem1, defItem2, defItem3];
 
 app.get("/", (req, res) => {
 
-    res.redirect("/today");
+    res.redirect("/Today");
 
 })
 
@@ -96,7 +96,13 @@ app.get("/:listTitle", (req, res) => {
 
 app.post("/", (req, res) => {
 
-    res.redirect("/today");
+    res.redirect("/Today");
+
+})
+
+app.post("/newList", (req, res) => {
+
+    res.redirect("/" + req.body.newList);
 
 })
 
